@@ -28,5 +28,9 @@
 
     <string name="source">Source &lt;a href="https://en.wikipedia.org/wiki/Machu_Picchu">Wikipedia&lt;/a></string>
     <string name="title_activity_sobre">Sobre</string>
-    <string name="title_activity_creditos">Creditos</string>
+    <string name="title_activity_creditos">Créditos</string>
+    <string name="title_activity_listagemlocais">Unifesp 360</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Voltar</string>
+    <string name="pick_toppings">Opções de Temporizador</string>
 </resources>

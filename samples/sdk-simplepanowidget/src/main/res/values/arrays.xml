@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="toppings">
+        <item>10 Segundos</item>
+        <item>15 Segundos</item>
+        <item>20 Segundos</item>
+        <item>30 Segundos</item>
+    </string-array>
+</resources>
