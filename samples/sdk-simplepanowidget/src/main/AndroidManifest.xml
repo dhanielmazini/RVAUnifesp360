@@ -54,7 +54,8 @@
         <activity
             android:name=".Creditos"
             android:label="@string/title_activity_creditos" />
-        <activity android:name=".Galeria"></activity>
+        <activity android:name=".Galeria">
+        </activity>
     </application>
 
 </manifest>

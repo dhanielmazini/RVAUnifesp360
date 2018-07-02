@@ -53,7 +53,7 @@ public class ListagemLocais extends Activity {
 
     public void trocaActivity(){
         Intent intent = new Intent(this, Galeria.class);
-        intent.putExtra("opção", opcaoEscolhida);
+        intent.putExtra("option", opcaoEscolhida);
         startActivity(intent);
     }
 }

@@ -14,27 +14,32 @@ import static android.content.ContentValues.TAG;
 public class Galeria extends Activity {
 
     private final String image_titles[] = {
-            "img1",
-            "img2",
-            "img3",
-            "img4"
+            "biblioteca_1",
+            "biblioteca_2",
+            "biblioteca_3",
+            "biblioteca_4"
     };
 
     private final Integer image_ids[] = {
-            R.drawable.img1,
-            R.drawable.img2,
-            R.drawable.img3,
-            R.drawable.img4
+            R.drawable.biblioteca_1,
+            R.drawable.biblioteca_2,
+            R.drawable.biblioteca_3,
+            R.drawable.biblioteca_4
     };
 
-    private ArrayList<CreateList> prepareData(){
+    private ArrayList<CreateList> prepareData(String option){
 
         ArrayList<CreateList> theimage = new ArrayList<>();
-        for(int i = 0; i< image_titles.length; i++){
+        for(int i = 0,j = 0; i< image_titles.length; i++){
             CreateList createList = new CreateList();
-            createList.setImage_title(image_titles[i]);
-            createList.setImage_ID(image_ids[i]);
-            theimage.add(createList);
+            // Se o texto clicado(Sem espaços) for igual ao texto inicial da imagem
+            if(option.trim().toLowerCase().equals(image_titles[i].substring(0,image_titles[i].indexOf('_')))){
+                createList.setImage_title(image_titles[j]);
+                createList.setImage_ID(image_ids[j]);
+                theimage.add(createList);
+                j++;
+            }
+
         }
         return theimage;
     }
@@ -44,17 +49,16 @@ public class Galeria extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_galeria);
         Intent i = getIntent();
-        Bundle teste = i.getExtras();
-        System.out.print(teste.toString());
+        String option = i.getStringExtra("option");
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_galeria);
 
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.imagegallery);
+        RecyclerView recyclerView = findViewById(R.id.imagegallery);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),2);
         recyclerView.setLayoutManager(layoutManager);
-        ArrayList<CreateList> createLists = prepareData();
+        ArrayList<CreateList> createLists = prepareData(option);
         MyAdapter adapter = new MyAdapter(getApplicationContext(), createLists);
         recyclerView.setAdapter(adapter);
     }

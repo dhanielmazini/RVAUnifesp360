@@ -62,6 +62,7 @@ public class SimpleVrPanoramaActivity extends Activity {
   /** Configuration information for the panorama. **/
   private Options panoOptions = new Options();
   private ImageLoaderTask backgroundImageLoaderTask;
+  private String image;
 
   /**
    * Called when the app is launched via the app icon or an intent using the adb command above. This
@@ -72,10 +73,8 @@ public class SimpleVrPanoramaActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main_layout);
 
-    // Make the source link clickable.
-    TextView sourceText = (TextView) findViewById(R.id.source);
-    sourceText.setText(Html.fromHtml(getString(R.string.source)));
-    sourceText.setMovementMethod(LinkMovementMethod.getInstance());
+    Intent i = getIntent();
+    image = i.getStringExtra("image");
 
     panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
     panoWidgetView.setEventListener(new ActivityEventListener());
@@ -172,9 +171,10 @@ public class SimpleVrPanoramaActivity extends Activity {
           || fileInformation[0] == null || fileInformation[0].first == null) {
         AssetManager assetManager = getAssets();
         try {
-          istr = assetManager.open("andes.jpg");
+          istr = assetManager.open(image + ".jpg");
           panoOptions = new Options();
-          panoOptions.inputType = Options.TYPE_STEREO_OVER_UNDER;
+          //panoOptions.inputType = Options.TYPE_STEREO_OVER_UNDER;
+          panoOptions.inputType = Options.TYPE_MONO;
         } catch (IOException e) {
           Log.e(TAG, "Could not decode default bitmap: " + e);
           return false;
@@ -188,7 +188,7 @@ public class SimpleVrPanoramaActivity extends Activity {
           return false;
         }
       }
-
+      //panoWidgetView.setDisplayMode(1);
       panoWidgetView.loadImageFromBitmap(BitmapFactory.decodeStream(istr), panoOptions);
       try {
         istr.close();
@@ -198,6 +198,12 @@ public class SimpleVrPanoramaActivity extends Activity {
 
       return true;
     }
+
+    /*panoWidgetView.setEventListener(VrPanoramaEventListener eventListener) {
+        float[] yawAndPitch = new float[2];
+        panoWidgetView.getHeadRotation(yawAndPitch);
+        System.out.println(yawAndPitch);
+    }*/
   }
 
   /**
@@ -224,4 +230,6 @@ public class SimpleVrPanoramaActivity extends Activity {
       Log.e(TAG, "Error loading pano: " + errorMessage);
     }
   }
+
+
 }
