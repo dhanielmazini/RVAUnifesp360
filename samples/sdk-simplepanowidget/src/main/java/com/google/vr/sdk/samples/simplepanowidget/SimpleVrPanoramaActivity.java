@@ -88,7 +88,7 @@ public class SimpleVrPanoramaActivity extends Activity {
 
     private Button btnFiltro;
 
-    private int opcao = 0;
+    private int opcao = 1;
 
     private AlertDialog alertDialog1;
 
@@ -124,8 +124,11 @@ public class SimpleVrPanoramaActivity extends Activity {
         // Initial launch of the app or an Activity recreation due to rotation.
         handleIntent(getIntent());
 
-        timer = 5000;
-        handler.postDelayed(r, timer);
+        if (opcao == 1) {
+            timer = 10000;
+            handler.postDelayed(r, timer);
+        }
+
         btnFiltro = (Button) findViewById(R.id.btnFiltro);
 
         btnFiltro.setOnClickListener(new View.OnClickListener(){
@@ -187,12 +190,14 @@ public class SimpleVrPanoramaActivity extends Activity {
     final Runnable r = new Runnable() {
         @Override
         public void run() {
+            if(opcao == 1) {
             /*int iter = (Integer.parseInt(image.substring(image.length()-1)) + 1) % drawablesFields.length;
             image = image.substring(0, image.indexOf('_')+1) + iter;*/
-            img_atual = (img_atual + 1) % drawables.size();
-            handler.postDelayed(this, timer);
-            backgroundImageLoaderTask = new ImageLoaderTask();
-            backgroundImageLoaderTask.execute(Pair.create(fileUri, panoOptions));
+                img_atual = (img_atual + 1) % drawables.size();
+                handler.postDelayed(this, timer);
+                backgroundImageLoaderTask = new ImageLoaderTask();
+                backgroundImageLoaderTask.execute(Pair.create(fileUri, panoOptions));
+            }
         }
     };
     /*handler.postDelayed(new Runnable() {
@@ -309,15 +314,26 @@ public class SimpleVrPanoramaActivity extends Activity {
     public void CreateAlertDialogWithRadioButtonGroup() {
         CharSequence[] itens = {"Desativar", "10 segundos", "20 segundos", "30 segundos"};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(SimpleVrPanoramaActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(SimpleVrPanoramaActivity.this, R.style.MyDialogTheme);
 
         builder.setTitle("Opções");
 
         builder.setSingleChoiceItems(itens, -1, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int item) {
-
-                opcao = item;
+                switch (item) {
+                    case 0:
+                        opcao = 0;
+                    case 1:
+                        opcao = 1;
+                        timer = 10000;
+                    case 2:
+                        opcao = 1;
+                        timer = 20000;
+                    case 3:
+                        opcao = 1;
+                        timer = 30000;
+                }
 
                 alertDialog1.dismiss();
             }
