@@ -124,7 +124,7 @@ public class SimpleVrPanoramaActivity extends Activity {
         // Initial launch of the app or an Activity recreation due to rotation.
         handleIntent(getIntent());
 
-        if (opcao == 1) {
+        if (opcao != 0) {
             timer = 10000;
             handler.postDelayed(r, timer);
         }
@@ -190,7 +190,7 @@ public class SimpleVrPanoramaActivity extends Activity {
     final Runnable r = new Runnable() {
         @Override
         public void run() {
-            if(opcao == 1) {
+            if(opcao != 0) {
             /*int iter = (Integer.parseInt(image.substring(image.length()-1)) + 1) % drawablesFields.length;
             image = image.substring(0, image.indexOf('_')+1) + iter;*/
                 img_atual = (img_atual + 1) % drawables.size();
@@ -317,31 +317,21 @@ public class SimpleVrPanoramaActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(SimpleVrPanoramaActivity.this, R.style.MyDialogTheme);
 
         builder.setTitle("Opções");
-
-        builder.setSingleChoiceItems(itens, -1, new DialogInterface.OnClickListener() {
-
+        builder.setSingleChoiceItems(itens, opcao, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
                     case 0:
-                        opcao = 0;
                     case 1:
-                        opcao = 1;
                         timer = 10000;
                     case 2:
-                        opcao = 1;
                         timer = 20000;
                     case 3:
-                        opcao = 1;
                         timer = 30000;
                 }
-
-                alertDialog1.dismiss();
+                opcao = item;
             }
         });
-        alertDialog1 = builder.create();
-        alertDialog1.show();
-
-
+        builder.show();
     }
 
 }
