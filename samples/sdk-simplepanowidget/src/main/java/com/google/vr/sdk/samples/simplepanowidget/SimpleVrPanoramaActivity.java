@@ -25,6 +25,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
@@ -74,7 +75,9 @@ public class SimpleVrPanoramaActivity extends Activity {
      **/
     private Options panoOptions = new Options();
     private ImageLoaderTask backgroundImageLoaderTask;
+
     private String image;
+    private int timer;
 
     private Button btnFiltro;
 
@@ -100,6 +103,8 @@ public class SimpleVrPanoramaActivity extends Activity {
         // Initial launch of the app or an Activity recreation due to rotation.
         handleIntent(getIntent());
 
+        timer = 5000;
+        handler.postDelayed(r, timer);
         btnFiltro = (Button) findViewById(R.id.btnFiltro);
 
         btnFiltro.setOnClickListener(new View.OnClickListener(){
@@ -156,6 +161,26 @@ public class SimpleVrPanoramaActivity extends Activity {
         backgroundImageLoaderTask = new ImageLoaderTask();
         backgroundImageLoaderTask.execute(Pair.create(fileUri, panoOptions));
     }
+
+    final Handler handler = new Handler();
+    final Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            int iter = (Integer.parseInt(image.substring(image.length()-1)) + 1) % 4;
+            image = "biblioteca_" + iter;
+            handler.postDelayed(this, timer);
+            backgroundImageLoaderTask = new ImageLoaderTask();
+            backgroundImageLoaderTask.execute(Pair.create(fileUri, panoOptions));
+        }
+    };
+    /*handler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            image = "biblioteca_3";
+            backgroundImageLoaderTask.execute(Pair.create(fileUri, panoOptions));
+            handler.postDelayed(this, 5000);
+        }
+    }, 5000);*/
 
     @Override
     protected void onPause() {
