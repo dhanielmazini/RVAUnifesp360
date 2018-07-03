@@ -14,17 +14,17 @@ import static android.content.ContentValues.TAG;
 public class Galeria extends Activity {
 
     private final String image_titles[] = {
-            "biblioteca_1",
-            "biblioteca_2",
-            "biblioteca_3",
-            "biblioteca_4"
+            "biblioteca_1_img",
+            "biblioteca_2_img",
+            "biblioteca_3_img",
+            "biblioteca_4_img"
     };
 
     private final Integer image_ids[] = {
-            R.drawable.biblioteca_1,
-            R.drawable.biblioteca_2,
-            R.drawable.biblioteca_3,
-            R.drawable.biblioteca_4
+            R.drawable.biblioteca_1_img,
+            R.drawable.biblioteca_2_img,
+            R.drawable.biblioteca_3_img,
+            R.drawable.biblioteca_4_img
     };
 
     private ArrayList<CreateList> prepareData(String option){

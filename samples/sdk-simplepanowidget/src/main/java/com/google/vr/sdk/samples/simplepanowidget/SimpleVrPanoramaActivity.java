@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,6 +44,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 /**
  * A basic PanoWidget Activity to load panorama images from disk. It will load a test image by
@@ -78,6 +81,10 @@ public class SimpleVrPanoramaActivity extends Activity {
 
     private String image;
     private int timer;
+    private int qtd_images;
+    private int img_atual;
+    Field[] drawablesFields = com.google.vr.sdk.samples.simplepanowidget.R.drawable.class.getFields();
+    ArrayList<String> drawables = new ArrayList<>();
 
     private Button btnFiltro;
 
@@ -93,9 +100,23 @@ public class SimpleVrPanoramaActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-
+        // Pega os valores da imagem clicada
         Intent i = getIntent();
         image = i.getStringExtra("image");
+        qtd_images = i.getIntExtra("qtd_images", 1);
+
+        // Define a ordem das imagens a serem mostradas
+        img_atual = 0;
+        int j = 0;
+        for (Field field : drawablesFields) {
+            if(field.getName().substring(field.getName().length() - 3, field.getName().length()).equals("img")) {
+                drawables.add(field.getName());
+                if ((image + "jpg").equals(field.getName())) {
+                    img_atual = j;
+                }
+                j++;
+            }
+        }
 
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
@@ -166,8 +187,9 @@ public class SimpleVrPanoramaActivity extends Activity {
     final Runnable r = new Runnable() {
         @Override
         public void run() {
-            int iter = (Integer.parseInt(image.substring(image.length()-1)) + 1) % 4;
-            image = "biblioteca_" + iter;
+            /*int iter = (Integer.parseInt(image.substring(image.length()-1)) + 1) % drawablesFields.length;
+            image = image.substring(0, image.indexOf('_')+1) + iter;*/
+            img_atual = (img_atual + 1) % drawables.size();
             handler.postDelayed(this, timer);
             backgroundImageLoaderTask = new ImageLoaderTask();
             backgroundImageLoaderTask.execute(Pair.create(fileUri, panoOptions));
@@ -223,7 +245,8 @@ public class SimpleVrPanoramaActivity extends Activity {
                     || fileInformation[0] == null || fileInformation[0].first == null) {
                 AssetManager assetManager = getAssets();
                 try {
-                    istr = assetManager.open(image + ".jpg");
+                    //istr = assetManager.open(image + ".jpg");
+                    istr = assetManager.open(drawables.get(img_atual) + ".jpg");
                     panoOptions = new Options();
                     //panoOptions.inputType = Options.TYPE_STEREO_OVER_UNDER;
                     panoOptions.inputType = Options.TYPE_MONO;

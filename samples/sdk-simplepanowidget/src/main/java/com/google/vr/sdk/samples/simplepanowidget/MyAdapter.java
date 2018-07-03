@@ -44,6 +44,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 context = v.getContext();
                 Intent intent = new Intent(context, SimpleVrPanoramaActivity.class);
                 intent.putExtra("image", imagem);
+                intent.putExtra("qtd_images", galleryList.size());
                 context.startActivity(intent);
             }
         });
